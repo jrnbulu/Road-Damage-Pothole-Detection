@@ -18,10 +18,12 @@ def test_find_split_dirs_maps_valid_to_val(yolo_dataset):
     assert set(yolo_utils.find_split_dirs(yolo_dataset)) == {"train", "val", "test"}
 
 
-def test_write_data_yaml(yolo_dataset):
-    cfg = yaml.safe_load(yolo_utils.write_data_yaml(yolo_dataset).read_text())
-    assert cfg["names"] == {0: "pothole"}
-    assert cfg["val"].replace("\\", "/").endswith("valid/images")
+def test_write_data_yaml_is_portable(yolo_dataset):
+    path = yolo_utils.write_data_yaml(yolo_dataset)
+    cfg = yaml.safe_load(path.read_text())
+    assert cfg == {"train": "train/images", "val": "valid/images", "test": "test/images",
+                   "names": {0: "pothole"}}  # relative, no machine-specific path
+    assert yolo_utils.split_dir_from_yaml(path, "val") == yolo_dataset.resolve() / "valid" / "images"
 
 
 def test_write_data_yaml_needs_val(tmp_path):

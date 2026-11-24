@@ -34,6 +34,16 @@ def test_log_experiment_appends_rows(tmp_path):
     assert rows[0]["mAP50"] == "0.5" and rows[0]["train_minutes"] == "1.2"
 
 
+def test_copy_training_artifacts_only_copies_known_files(tmp_path):
+    run = tmp_path / "run"
+    run.mkdir()
+    for name in ("results.png", "results.csv", "weights.bin"):
+        (run / name).write_text("x")
+    copied = train.copy_training_artifacts(run, tmp_path / "out")
+    assert sorted(copied) == ["results.csv", "results.png"]
+    assert not (tmp_path / "out" / "weights.bin").exists()
+
+
 def test_configs_are_valid_and_differ():
     base = yaml.safe_load((ROOT / "configs" / "baseline.yaml").read_text())
     adv = yaml.safe_load((ROOT / "configs" / "advanced.yaml").read_text())

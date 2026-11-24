@@ -1,19 +1,25 @@
-# Data and training outputs (too large for git; recreate with the scripts)
-/data/
+# Data: raw downloads stay local (zips exceed GitHub's 100 MB file limit);
+# the processed RDD2022 India set (~130 MB of small images) is committed.
+/data/raw/
+/data/processed/*
+!/data/processed/rdd_india/
 /runs/
 *.zip
 *.part
 
-# Weights: keep only the final demo model if it is small enough (<100 MB)
+# Weights: commit only the final trained models (small .pt files)
 models/*
 !models/.gitkeep
 !models/best.pt
-yolov8*.pt
-yolo11*.pt
+!models/baseline_yolov8n.pt
+!models/advanced_yolov8s_india.pt
+/yolov8*.pt
+/yolo11*.pt
 *.onnx
 *_saved_model/
 
-reports/eval/*/*/ultralytics_val/
+# Evaluation scratch runs (confidence sweep)
+reports/eval/conf_*/
 
 # Python
 __pycache__/

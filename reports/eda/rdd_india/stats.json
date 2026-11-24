@@ -1,0 +1,26 @@
+{
+  "dataset": "rdd_india",
+  "splits": {
+    "train": {
+      "images": 1530,
+      "boxes": 2574,
+      "images_without_potholes": 293
+    },
+    "val": {
+      "images": 191,
+      "boxes": 272,
+      "images_without_potholes": 49
+    },
+    "test": {
+      "images": 191,
+      "boxes": 341,
+      "images_without_potholes": 40
+    }
+  },
+  "issues": {},
+  "image_sizes_top5": [
+    "720x720 (1912)"
+  ],
+  "box_area_median": 0.008690220216,
+  "small_boxes_pct": 54.2
+}

@@ -44,13 +44,25 @@ def read_labels(label_file: Path) -> list[tuple[int, float, float, float, float]
 
 
 def write_data_yaml(dataset_dir: Path, names: list[str] = CLASS_NAMES) -> Path:
-    """Write a data.yaml with absolute paths (Roboflow's relative ones often break)."""
+    """Write a portable data.yaml: split paths are relative to the yaml's own folder.
+
+    There is deliberately no `path:` key, so ultralytics resolves the splits against the
+    folder holding data.yaml. The dataset then works after cloning, copying or on Colab.
+    """
     dataset_dir = dataset_dir.resolve()
     splits = find_split_dirs(dataset_dir)
     if "train" not in splits or "val" not in splits:
         raise SystemExit(f"{dataset_dir} needs at least train/ and valid/ (or val/) folders with images/")
-    cfg = {"path": str(dataset_dir), **{k: str(v) for k, v in splits.items()},
+    cfg = {**{k: v.relative_to(dataset_dir).as_posix() for k, v in splits.items()},
            "names": dict(enumerate(names))}
     out = dataset_dir / "data.yaml"
     out.write_text(yaml.safe_dump(cfg, sort_keys=False))
     return out
+
+
+def split_dir_from_yaml(data_yaml: Path, split: str) -> Path:
+    """Resolve a split's image folder from data.yaml the same way ultralytics does."""
+    cfg = yaml.safe_load(data_yaml.read_text())
+    base = Path(cfg["path"]) if cfg.get("path") else data_yaml.parent
+    p = Path(cfg[split])
+    return p if p.is_absolute() else base / p

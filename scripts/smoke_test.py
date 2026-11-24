@@ -50,7 +50,8 @@ def run(*args, env=None):
 
 
 def cleanup():
-    for p in (PROCESSED_DIR / NAME, RUNS_DIR / NAME, REPORTS_DIR / "eda" / NAME, REPORTS_DIR / "eval" / NAME):
+    for p in (PROCESSED_DIR / NAME, RUNS_DIR / NAME, REPORTS_DIR / "eda" / NAME, REPORTS_DIR / "eval" / NAME,
+              REPORTS_DIR / "training" / NAME):
         shutil.rmtree(p, ignore_errors=True)
     for p in (MODELS_DIR / f"{NAME}.pt", ROOT / "yolov8n.pt"):
         p.unlink(missing_ok=True)

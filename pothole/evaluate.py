@@ -20,10 +20,9 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-import yaml
 
 from pothole.config import CONF_THRESHOLD, IMG_SIZE, REPORTS_DIR, ROOT
-from pothole.data.yolo_utils import label_path_for, list_images, read_labels
+from pothole.data.yolo_utils import label_path_for, list_images, read_labels, split_dir_from_yaml
 
 MATCH_IOU = 0.5
 SIZE_BUCKETS = [("small (<1% of image)", 0, 0.01), ("medium (1-5%)", 0.01, 0.05), ("large (>5%)", 0.05, 1.01)]
@@ -91,9 +90,7 @@ def evaluate_model(model_path: Path, data_yaml: Path, split: str, conf: float, d
                "precision": float(val.box.mp), "recall": float(val.box.mr)}
 
     # 2) Operating-point analysis on the test images
-    cfg = yaml.safe_load(data_yaml.read_text())
-    img_dir = Path(cfg[split]) if Path(cfg[split]).is_absolute() else Path(cfg["path"]) / cfg[split]
-    images = list_images(img_dir)
+    images = list_images(split_dir_from_yaml(data_yaml, split))
     tp = fp = fn = 0
     ious, latencies, per_image = [], [], []
     bucket_hits = {b[0]: [0, 0] for b in SIZE_BUCKETS}

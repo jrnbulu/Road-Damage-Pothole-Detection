@@ -69,6 +69,22 @@ def log_experiment(cfg: dict, metrics: dict, weights: Path, elapsed_min: float,
     print(f"Logged to {log}")
 
 
+TRAINING_ARTIFACTS = ["results.csv", "results.png", "train_config.json", "args.yaml", "labels.jpg",
+                      "BoxPR_curve.png", "PR_curve.png", "BoxF1_curve.png", "F1_curve.png",
+                      "confusion_matrix.png", "val_batch0_labels.jpg", "val_batch0_pred.jpg"]
+
+
+def copy_training_artifacts(run_dir: Path, dest: Path) -> list[str]:
+    """Copy the small, report-worthy files from a run (runs/ itself is not committed)."""
+    dest.mkdir(parents=True, exist_ok=True)
+    copied = []
+    for name in TRAINING_ARTIFACTS:
+        if (run_dir / name).exists():
+            shutil.copy2(run_dir / name, dest / name)
+            copied.append(name)
+    return copied
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", type=Path, default=ROOT / "configs" / "baseline.yaml")
@@ -97,6 +113,7 @@ def main():
 
     log_experiment(cfg, best_epoch_metrics(run_dir / "results.csv"), final, elapsed)
     (run_dir / "train_config.json").write_text(json.dumps(cfg, indent=2, default=str))
+    copy_training_artifacts(run_dir, REPORTS_DIR / "training" / cfg["name"])
     print(f"Best weights: {final}\nTo use in the app: copy to models/best.pt or set MODEL_PATH={final}")
 
 
