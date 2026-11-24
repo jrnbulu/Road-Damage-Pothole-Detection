@@ -1,0 +1,27 @@
+# Data and training outputs (too large for git; recreate with the scripts)
+/data/
+/runs/
+*.zip
+*.part
+
+# Weights: keep only the final demo model if it is small enough (<100 MB)
+models/*
+!models/.gitkeep
+!models/best.pt
+yolov8*.pt
+yolo11*.pt
+*.onnx
+*_saved_model/
+
+reports/eval/*/*/ultralytics_val/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Secrets
+.env

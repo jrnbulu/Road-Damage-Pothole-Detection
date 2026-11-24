@@ -1,0 +1,9 @@
+# Minimal set for the Docker image (inference only, CPU)
+ultralytics>=8.3,<9
+numpy
+pandas
+pyyaml
+streamlit>=1.46
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9

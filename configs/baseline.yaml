@@ -1,0 +1,12 @@
+# Baseline: YOLOv8 nano, mostly default settings.
+# Any key here is passed straight to ultralytics `model.train(...)`.
+name: baseline_yolov8n
+model: yolov8n.pt
+data: data/processed/roboflow/data.yaml
+epochs: 50
+imgsz: 640
+batch: 16
+optimizer: auto
+patience: 20
+seed: 42
+deterministic: true

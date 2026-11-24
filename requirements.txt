@@ -1,0 +1,28 @@
+# Core
+ultralytics>=8.3,<9
+opencv-python-headless>=4.9
+numpy
+pandas
+pillow
+pyyaml
+matplotlib
+
+# Data access
+roboflow>=1.1
+
+# Demo app + API
+streamlit>=1.46
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+
+# Optimisation (optional)
+onnx
+onnxruntime
+
+# Notebooks, presentation, tests
+jupyter
+nbformat
+python-pptx
+pytest
+httpx

@@ -1,0 +1,28 @@
+# Advanced: YOLOv8 small, trained on Roboflow + RDD2022 India potholes,
+# with longer training, a cosine LR schedule and road-specific augmentation.
+name: advanced_yolov8s_india
+model: yolov8s.pt
+data: data/processed/merged/data.yaml   # build with: python -m pothole.data.merge
+epochs: 120
+imgsz: 640
+batch: 16
+optimizer: AdamW
+lr0: 0.001
+cos_lr: true
+weight_decay: 0.0005
+patience: 30
+close_mosaic: 15
+# Augmentation tuned for dashcam/road photos: lighting and scale vary a lot,
+# roads are never upside down, so no vertical flip.
+hsv_h: 0.015
+hsv_s: 0.6
+hsv_v: 0.5
+degrees: 3.0
+translate: 0.1
+scale: 0.6
+fliplr: 0.5
+flipud: 0.0
+mosaic: 1.0
+mixup: 0.1
+seed: 42
+deterministic: true

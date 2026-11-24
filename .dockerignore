@@ -1,0 +1,13 @@
+/data/
+/runs/
+reports/
+notebooks/
+docs/
+tests/
+scripts/
+.git/
+.venv/
+**/__pycache__/
+*.zip
+*.onnx
+*_saved_model/
